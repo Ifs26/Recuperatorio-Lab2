@@ -2,6 +2,13 @@
 // Ejercicio 1: Modelar la jerarquía de entidades
 // =====================================================================
 
+// USO DE TRAIT PARA ENTITY TYPE
+/* 
+trait entType {
+  def entityType: String
+}
+*/
+
 /**
  * Clase base abstracta para todas las entidades nombradas.
  *
@@ -10,7 +17,7 @@
  *
  * @param text el texto tal como aparece en el corpus
  */
-abstract class NamedEntity(val text: String) {
+abstract class NamedEntity(val text: String) { //extends entType
 
   /**
    * Retorna el tipo de la entidad como String.
@@ -43,6 +50,31 @@ abstract class NamedEntity(val text: String) {
 //   ├── Place
 //   └── Technology
 //       └── ProgrammingLanguage
+
+class Person(text: String) extends NamedEntity(text) {
+  override def entityType = "Person"
+}
+
+class Organization(text: String) extends NamedEntity(text) {
+  override def entityType = "Organization"
+}
+
+class University(text: String) extends Organization(text) {
+  override def entityType = "University"
+}
+
+class Place(text: String) extends NamedEntity(text) {
+  override def entityType = "Place"
+}
+
+class Technology(text: String) extends NamedEntity(text) {
+  override def entityType = "Technology"
+}
+
+class ProgrammingLanguage(text: String) extends Technology(text) {
+  override def entityType = "ProgrammingLanguage"
+}
+
 //
 // Luego de implementar las clases, este código debe compilar:
 //
