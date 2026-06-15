@@ -1,6 +1,7 @@
 // =====================================================================
 // Ejercicio 2: Cargar diccionarios de entidades
 // =====================================================================
+import FileIO.readLines
 
 /**
  * Responsable de cargar colecciones de entidades nombradas desde archivos.
@@ -38,7 +39,22 @@ object Dictionary {
    *
    */
   def loadFromFile(filePath: String, entityType: String): List[NamedEntity] = {
-    ???
+
+    val lineas = readLines(filePath)
+
+    lineas.flatMap(word => 
+      entityType match {
+        case "Person"                           => Some(new Person(word))
+        case "Organization"                     => Some(new Organization(word))
+        //Cada University object ya hereda ser Organizaciones aunque no estén en el archivo correspondiente
+        case "University"                       => Some(new University(word)) 
+        case "Place"                            => Some(new Place(word))
+        //case "Technology"                     => Some(new Technology(word)) //no hay txt para tecnologias
+        case "ProgrammingLanguage"              => Some(new ProgrammingLanguage(word))
+        case _                                  => None //descarte gracias a flatmap luego
+      }
+    )
+
   }
 
   /**
@@ -50,6 +66,24 @@ object Dictionary {
    *
    */
   def loadAll(): List[NamedEntity] = {
-    ???
+
+    val entityPath = List(("data/people.txt","Person"),
+                          ("data/universities.txt","University"),
+                          ("data/languages.txt","ProgrammingLanguage"),
+                          ("data/organizations.txt","Organization"),
+                          ("data/places.txt","Place"))
+
+    val allDict = entityPath.flatMap{ case (path,tipo) =>
+      loadFromFile(path,tipo)
+    }
+    allDict.distinctBy(_.text)
+    /** (DDD) Uso de distinctBy:
+    *
+    * Elimina entidades cuyo texto es idéntico, conservando la primera 
+    * ocurrencia. Útil cuando un mismo nombre aparece en múltiples 
+    * archivos (ej: "MIT" en universities.txt y organizations.txt).
+    * La prioridad la define el orden de entityPath. Si quiero tener repetidos
+    * por cuestiones semanticas debería quitarlo.
+    **/
   }
 }

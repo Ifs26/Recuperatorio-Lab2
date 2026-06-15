@@ -56,6 +56,11 @@ class Ejercicio2_loadAll extends munit.FunSuite {
         assertEquals(allInstances.length, allInstances.distinct.length)
     }
    */
+  test("loadAll does not contain duplicate entities by name") {
+    val allInstances = Dictionary.loadAll()
+    val names = allInstances.map(_.text)
+    assertEquals(names.length, names.distinct.length)
+  }
 
   test("loadAll excludes file headers and returns exact entity count") {
     assertNotEquals(allInstances.length, Check.totalIntance + Check.fileNumber)
