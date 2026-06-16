@@ -56,6 +56,10 @@ class Ejercicio2_loadAll extends munit.FunSuite {
         assertEquals(allInstances.length, allInstances.distinct.length)
     }
    */
+  
+  /*Este test es una decision de diseño particular, quitar si se permite
+  * por ejemplo tener Oxford como lugar y Oxford como universidad a la vez
+  */
   test("loadAll does not contain duplicate entities by name") {
     val allInstances = Dictionary.loadAll()
     val names = allInstances.map(_.text)
