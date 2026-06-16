@@ -6,6 +6,7 @@
  * Responsable de detectar entidades nombradas en texto libre y
  * producir estadísticas sobre ellas.
  */
+import scala.util.matching.Regex
 object Analyzer {
 
   /**
@@ -13,29 +14,24 @@ object Analyzer {
    *
    * @param text       texto a analizar (ej: título o cuerpo de un post)
    * @param dictionary lista de entidades conocidas (cargadas desde los diccionarios)
-   * @return lista de entidades cuyo texto aparece en el texto analizado
+   * @return lista de entidades cuyo texto aparece en el texto analizado.
+   * 
+   * Para cada entidad, construye una regex con bordes de palabra (\b lookaround)
+   * que matchea su nombre de forma case-insensitive, evitando falsos positivos
+   * por substrings (ej: "Java" no debe matchear dentro de "JavaScript").
+   * Regex.quote escapa caracteres especiales en nombres compuestos (ej: "C++").
    *
-   * TODO (Ejercicio 3): Implementar este método.
-   *
-   *   Para cada entidad en el diccionario, verificar si su texto aparece en el
-   *   texto del post. Retornar únicamente las entidades que aparecen.
-   *
-   *   Ejemplo:
-   *     text       = "Scala fue creado en EPFL por Martin Odersky"
-   *     dictionary = List(
-   *                    ProgrammingLanguage("Scala"),
-   *                    University("EPFL"),
-   *                    Person("Martin Odersky"),
-   *                    Person("Ada Lovelace")   ← no aparece en el texto
-   *                  )
-   *     resultado  = List(
-   *                    ProgrammingLanguage("Scala"),
-   *                    University("EPFL"),
-   *                    Person("Martin Odersky")
-   *                  )
    */
   def detectEntities(text: String, dictionary: List[NamedEntity]): List[NamedEntity] = {
-    ???
+
+    val lowerText = text.toLowerCase
+    dictionary
+      .filter(entity => {
+        val escaped = Regex.quote(entity.text.toLowerCase)
+        val pattern = s"(?<![\\w])$escaped(?![\\w])"
+        pattern.r.findFirstIn(lowerText).isDefined
+      })
+      .distinctBy(entity => (entity.text, entity.entityType))
   }
 
   /**
