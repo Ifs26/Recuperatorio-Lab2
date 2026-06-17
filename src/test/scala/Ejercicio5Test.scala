@@ -2,11 +2,7 @@ import Formatters.formatEntityStats
 
 class Ejercicio5_countByType extends munit.FunSuite {
 
-  test("countByType with empty list returns empty map") {
-    assertEquals(Analyzer.countByType(List.empty), Map.empty[String, Int])
-  }
-
-  test("countByType returns correct count per entity type") {
+  test("countByType groups entities and counts correctly by type") {
     val entities = List(
       new Person("Alan Turing"),
       new ProgrammingLanguage("Scala"),
@@ -16,10 +12,17 @@ class Ejercicio5_countByType extends munit.FunSuite {
 
     val resultado = Analyzer.countByType(entities)
 
-    assertEquals(resultado("Person"), 2)
-    assertEquals(resultado("ProgrammingLanguage"), 1)
-    assertEquals(resultado("University"), 1)
-    assert(!resultado.contains("Organization"))
+    val esperado = Map(
+      "Person" -> 2,
+      "ProgrammingLanguage" -> 1,
+      "University" -> 1
+    )
+
+    assertEquals(resultado, esperado)
+  }
+
+  test("countByType returns empty map for empty list") {
+    assertEquals(Analyzer.countByType(List.empty), Map.empty[String, Int])
   }
 }
 

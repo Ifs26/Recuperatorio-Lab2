@@ -17,7 +17,8 @@ trait entType {
  *
  * @param text el texto tal como aparece en el corpus
  */
-abstract class NamedEntity(val text: String) { //extends entType
+abstract class NamedEntity(val text: String) { //extends entType 
+                          //"val" indica que es un parametro público
 
   /**
    * Retorna el tipo de la entidad como String.

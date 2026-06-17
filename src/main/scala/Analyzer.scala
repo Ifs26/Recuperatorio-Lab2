@@ -56,6 +56,11 @@ object Analyzer {
    *                 )
    */
   def countByType(entities: List[NamedEntity]): Map[String, Int] = {
-    ???
+
+    //Casos individuales
+    val counts = entities.map{case entity => (entity.entityType, 1)}
+    val res = counts.groupMapReduce(_._1)(_._2)(_ + _)
+
+    res
   }
 }
