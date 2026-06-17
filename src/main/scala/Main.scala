@@ -1,6 +1,7 @@
 // =====================================================================
 // Ejercicio 6: Integración del sistema completo
 // =====================================================================
+import java.text.Format
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -9,7 +10,7 @@ object Main {
     // Paso 1: Cargar diccionarios
     // ------------------------------------------------------------------
     // TODO (Ejercicio 2)
-    val dictionary: List[NamedEntity] = ???
+    val dictionary: List[NamedEntity] = Dictionary.loadAll()
 
     println(s"Diccionario cargado: ${dictionary.size} entidades.\n")
 
@@ -33,12 +34,25 @@ object Main {
     //     1. Detectar entidades
     //     2. Formatear y mostrar el resultado
 
+    val allEntities = allPosts.flatMap{case (url,titles) => 
+      val allEntitiesFromUrl = titles.flatMap{title =>
+        val entities = Analyzer.detectEntities(title,dictionary)
+        println(Formatters.formatNERResult(title,entities))
+        entities
+      }
+      allEntitiesFromUrl
+    }
+
     // ------------------------------------------------------------------
     // Paso 4: Estadísticas globales
     // ------------------------------------------------------------------
     // TODO (Ejercicios 5 y 6):
     //   1. Recolectar TODAS las entidades detectadas en todos los posts
     //   2. Contar por tipo
+
+    val counts = Analyzer.countByType(allEntities)
+    Formatters.formatEntityStats(counts)
+
     //   3. Mostrar el resumen
 
   }
