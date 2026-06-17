@@ -9,6 +9,13 @@ trait entType {
 }
 */
 
+/*trait para contar cantidad de instancias de una clase*/
+trait Contador {
+  private var total : Int = 0
+  def incrementar() : Unit = total += 1
+  def total_instancias() : Int = total
+}
+
 /**
  * Clase base abstracta para todas las entidades nombradas.
  *
@@ -52,38 +59,38 @@ abstract class NamedEntity(val text: String) { //extends entType
 //   └── Technology
 //       └── ProgrammingLanguage
 
-class Person(text: String) extends NamedEntity(text) {
+object PersonCount extends Contador
+class Person(text: String) extends NamedEntity(text){
   override def entityType = "Person"
+  PersonCount.incrementar()
 }
 
+object OrganizationCount extends Contador
 class Organization(text: String) extends NamedEntity(text) {
   override def entityType = "Organization"
+  OrganizationCount.incrementar()
 }
 
+object UniversityCount extends Contador
 class University(text: String) extends Organization(text) {
   override def entityType = "University"
+  UniversityCount.incrementar()
 }
 
+object PlaceCount extends Contador
 class Place(text: String) extends NamedEntity(text) {
   override def entityType = "Place"
+  PlaceCount.incrementar()
 }
 
+object TechnologyCount extends Contador
 class Technology(text: String) extends NamedEntity(text) {
   override def entityType = "Technology"
+  TechnologyCount.incrementar()
 }
 
+object ProgrammingLanguageCount extends Contador
 class ProgrammingLanguage(text: String) extends Technology(text) {
   override def entityType = "ProgrammingLanguage"
+  ProgrammingLanguageCount.incrementar()
 }
-
-//
-// Luego de implementar las clases, este código debe compilar:
-//
-//   val entities: List[NamedEntity] = List(
-//     new Person("Alan Turing"),
-//     new University("MIT"),
-//     new ProgrammingLanguage("Scala"),
-//     new Place("San Francisco")
-//   )
-//   entities.foreach(e => println(e.describe))
-// =====================================================================
