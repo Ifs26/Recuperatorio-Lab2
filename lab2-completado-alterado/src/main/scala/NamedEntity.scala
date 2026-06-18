@@ -16,6 +16,35 @@ trait Contador {
   def total_instancias() : Int = total
 }
 
+/*trait para crear instancias*/
+trait Factory {
+  def create(name : String): NamedEntity
+}
+
+object personFactory extends Factory{
+  def create(text : String) = new Person(text)
+}
+
+object organizationFactory extends Factory{
+  def create(text : String) = new Organization(text)
+}
+
+object universityFactory extends Factory{
+  def create(text : String) = new University(text)
+}
+
+object placeFactory extends Factory{
+  def create(text : String) = new Place(text)
+}
+
+object technologyFactory extends Factory{
+  def create(text : String) = new Technology(text)
+}
+
+object programmingLanguageFactory extends Factory{
+  def create(text : String) = new ProgrammingLanguage(text)
+}
+
 /**
  * Clase base abstracta para todas las entidades nombradas.
  *

@@ -21,6 +21,14 @@ import FileIO.readLines
  */
 object Dictionary {
 
+  val factories : Map[String,Factory] = Map(
+      "Person" -> personFactory,
+      "Organization" -> organizationFactory,
+      "University" -> universityFactory,
+      "Place" -> placeFactory,
+      "ProgrammingLanguage" -> programmingLanguageFactory, 
+  )
+
   /**
    * Lee un archivo de diccionario y crea una lista de entidades del tipo indicado.
    *
@@ -39,24 +47,11 @@ object Dictionary {
    *
    */
   def loadFromFile(filePath: String, entityType: String): List[NamedEntity] = {
-
-    val lineas = readLines(filePath)
-
-    lineas.flatMap(word => 
-      entityType match {
-        case "Person"                           => Some(new Person(word))
-        case "Organization"                     => Some(new Organization(word))
-        //Cada University object ya hereda ser Organizaciones aunque no estén en el archivo correspondiente
-        case "University"                       => Some(new University(word)) 
-        case "Place"                            => Some(new Place(word))
-        //case "Technology"                     => Some(new Technology(word)) //no hay txt para tecnologias
-        case "ProgrammingLanguage"              => Some(new ProgrammingLanguage(word))
-        case _                                  => None //descarte gracias a flatmap luego
-      }
-    )
-
-    
-
+    val dictiorary = factories
+                    .get(entityType)
+                    .map(factory => FileIO.readLines(filePath).map(factory.create))
+                    .getOrElse(List.empty[NamedEntity])
+    dictiorary
   }
 
   /**
