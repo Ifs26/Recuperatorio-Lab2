@@ -2,20 +2,6 @@
 // Ejercicio 1: Modelar la jerarquía de entidades
 // =====================================================================
 
-// USO DE TRAIT PARA ENTITY TYPE
-/* 
-trait entType {
-  def entityType: String
-}
-*/
-
-/*trait para contar cantidad de instancias de una clase*/
-trait Contador {
-  private var total : Int = 0
-  def incrementar() : Unit = total += 1
-  def total_instancias() : Int = total
-}
-
 /*trait para crear instancias*/
 trait Factory {
   def create(name : String): NamedEntity
@@ -71,6 +57,8 @@ abstract class NamedEntity(val text: String) { //extends entType
    * subclase sin necesidad de redefinirlo. Esto es polimorfismo.
    */
   def describe: String = s"[$entityType] $text"
+
+  def hierarchy : List[String] = List(entityType)
 }
 
 // =====================================================================
@@ -88,38 +76,32 @@ abstract class NamedEntity(val text: String) { //extends entType
 //   └── Technology
 //       └── ProgrammingLanguage
 
-object PersonCount extends Contador
 class Person(text: String) extends NamedEntity(text){
   override def entityType = "Person"
-  PersonCount.incrementar()
 }
 
-object OrganizationCount extends Contador
 class Organization(text: String) extends NamedEntity(text) {
   override def entityType = "Organization"
-  OrganizationCount.incrementar()
 }
 
-object UniversityCount extends Contador
 class University(text: String) extends Organization(text) {
   override def entityType = "University"
-  UniversityCount.incrementar()
+  
+  override def hierarchy: List[String] = List(entityType,super.entityType)
 }
 
-object PlaceCount extends Contador
 class Place(text: String) extends NamedEntity(text) {
   override def entityType = "Place"
-  PlaceCount.incrementar()
 }
 
-object TechnologyCount extends Contador
 class Technology(text: String) extends NamedEntity(text) {
   override def entityType = "Technology"
-  TechnologyCount.incrementar()
 }
 
-object ProgrammingLanguageCount extends Contador
-class ProgrammingLanguage(text: String) extends Technology(text) {
+class ProgrammingLanguage(text: String)
+extends Technology(text) {
+
   override def entityType = "ProgrammingLanguage"
-  ProgrammingLanguageCount.incrementar()
+  override def hierarchy = List(entityType,super.entityType)
+    
 }

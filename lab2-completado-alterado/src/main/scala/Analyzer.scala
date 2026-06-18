@@ -63,4 +63,10 @@ object Analyzer {
 
     res
   }
+
+def countByType3(entities: List[NamedEntity]): Map[String, Int] = {
+  entities
+    .flatMap(_.hierarchy)
+    .groupMapReduce(identity)(_ => 1)(_ + _)
+}
 }
