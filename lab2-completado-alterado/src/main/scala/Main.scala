@@ -51,7 +51,7 @@ object Main {
     //   2. Contar por tipo
 
     val counts = Analyzer.countByType(allEntities)
-    Formatters.formatEntityStats(counts)
+    println(Formatters.formatEntityStats(counts))
 
     //   3. Mostrar el resumen
 

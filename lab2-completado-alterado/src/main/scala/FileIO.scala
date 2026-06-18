@@ -15,8 +15,9 @@ object FileIO {
   /** Retorna las URLs de los subreddits a analizar. */
   def readSubscriptions(): List[String] = {
     List(
-      "https://www.reddit.com/r/scala/.json?count=10",
-      "https://www.reddit.com/r/learnprogramming/.json?count=10"
+      "http://localhost:8123/r/scala/.json",
+      "http://localhost:8123/r/programming/.json",
+      "http://localhost:8123/r/learnpython/.json"
     )
   }
 
