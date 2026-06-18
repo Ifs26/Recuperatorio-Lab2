@@ -1,4 +1,5 @@
 import scala.util.matching.Regex
+import java.util.jar.Attributes.Name
 /**
  * Clase base abstracta para todas las entidades nombradas.
  *
@@ -26,6 +27,8 @@ abstract class NamedEntity(val text: String) {
     pattern.r.findFirstIn(text.toLowerCase()).isDefined
   }
 
+  def isRelevant: Boolean = true
+
 }
 
 class Person(text: String) extends NamedEntity(text) {
@@ -40,19 +43,25 @@ class Person(text: String) extends NamedEntity(text) {
     .findFirstIn(text)
     .isDefined
   }
-  
+
 }
 
 class Organization(text: String) extends NamedEntity(text) {
   def entityType: String = "Organization"
+
+  override def isRelevant: Boolean = false
 }
 
 class University(text: String) extends Organization(text) {
   override def entityType: String = "University"
+
+  override def isRelevant: Boolean = true
 }
 
 class Place(text: String) extends NamedEntity(text) {
   def entityType: String = "Place"
+
+  override def isRelevant: Boolean = false
 }
 
 class Technology(text: String) extends NamedEntity(text) {
@@ -67,8 +76,20 @@ class Technology(text: String) extends NamedEntity(text) {
     .findFirstIn(text)
     .isDefined
   }
+
+  override def isRelevant: Boolean = false
 }
 
 class ProgrammingLanguage(text: String) extends Technology(text) {
   override def entityType: String = "ProgrammingLanguage"
+
+  override def isRelevant: Boolean = true
+}
+
+abstract class Event(text: String) extends NamedEntity(text){
+
+}
+
+class Conference(text: String) extends Event(text) {
+  override def entityType : String = "Conference"
 }
