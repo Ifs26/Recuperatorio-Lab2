@@ -30,4 +30,30 @@ object Formatters {
       .map { case (entityType, count) => s"$entityType: $count" }
     ("=== Estadísticas de entidades ===" :: lines).mkString("\n")
   }
+
+  def formatGroupedNERResult(postTitle: String, entities: List[NamedEntity]): String = {
+
+    val default = s"\nPost: ${postTitle}" +
+                  s"\nEntidades detectadas:\n"
+
+    entities match{
+      case Nil => default + " (sin entidades detectadas)"
+
+      case _ =>
+
+        val groups = entities.groupBy(entity => entity.entityType).toList.sortBy(_._1)
+
+        val stringsPerGroup = groups.map{
+          case (entType,entities) =>  
+            s"$entType (${entities.size}):\n" + 
+            entities
+            .sortBy(_.text)
+            .map(entity => s" " +entity.text)
+            .mkString("\n")
+        }.mkString("\n  ")
+
+        default +
+        s"$stringsPerGroup"
+    }
+  }
 }

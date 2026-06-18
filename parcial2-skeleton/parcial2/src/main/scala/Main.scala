@@ -13,7 +13,9 @@ object Main {
       println(s"\n${"=" * 60}\n$url\n${"=" * 60}")
       titles.flatMap { title =>
         val entities = Analyzer.detectEntities(title, dictionary)
-        println(Formatters.formatNERResult(title, entities))
+        //println(Formatters.formatNERResult(title, entities))
+        val relevants = Analyzer.detectRelevant(title,dictionary)
+        println(Formatters.formatGroupedNERResult(title, relevants))
         entities
       }
     }
